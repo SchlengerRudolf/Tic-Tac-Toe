@@ -12,7 +12,7 @@ function gameBoard() {
 
     const getBoard = () => board;
 
-    const setBoard = (row, column, player) => {
+    const setField = (row, column, player) => {
         if (board[row][column].getValue() === 0) {
             board[row][column].setValue(player);
             console.log(board[row][column].getValue());
@@ -20,7 +20,7 @@ function gameBoard() {
         return;
     }
 
-    return { getBoard, setBoard };
+    return { getBoard, setField };
 }
 
 function field() {
