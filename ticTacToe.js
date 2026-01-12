@@ -1,4 +1,4 @@
-function gameBoard() {
+const gameBoard = (function () {
     const row = 3;
     const column = 3;
     const board = [];
@@ -6,34 +6,23 @@ function gameBoard() {
     for (let i = 0; i < row; i++) {
         board[i] = [];
         for (let j = 0; j < column; j++) {
-            board[i].push(field());
+            board[i].push(0);
         }
     }
 
     const getBoard = () => board;
 
     const setField = (row, column, player) => {
-        if (board[row][column].getValue() === 0) {
-            board[row][column].setValue(player);
-            console.log(board[row][column].getValue());
+        if (board[row][column] === 0) {
+            board[row][column] = player;
+
+            return true;
         }
-        return;
-    }
+        return false;
+    };
 
     return { getBoard, setField };
-}
-
-function field() {
-    value = 0;
-
-    const setValue = (player) => {
-        value = player;
-    }
-    
-    const getValue = () => value;
-
-    return { setValue, getValue };
-}
+})();
 
 function player(name) {
     const playerName = name;
@@ -42,11 +31,3 @@ function player(name) {
 
     return { getName };
 }
-
-function gameController() {
-
-}
-
-const game = gameBoard();
-const playerOne = player("Rudi");
-game.setBoard(0, 0, playerOne);
