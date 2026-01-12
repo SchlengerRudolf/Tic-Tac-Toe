@@ -31,3 +31,33 @@ function player(name) {
 
     return { getName };
 }
+
+const gameController = (function () {
+    const playerOne = player("Rudi").getName();
+    const playerTwo = player("Diego").getName();
+
+    let playersTurn = playerOne;
+
+    const switchTurn = function () {
+        playersTurn = playersTurn === playerOne ? playerTwo : playerOne;
+    }
+
+    const playRound = function (row, column) {
+        let validTurn = false;
+        console.log(validTurn);
+
+        while (!validTurn) {
+            validTurn = gameBoard.setField(row, column, playersTurn);
+            console.log(validTurn);
+        }
+
+        switchTurn();
+    }
+
+    return { playRound };
+})();
+
+gameController.playRound(0, 0);
+gameController.playRound(1, 1);
+gameController.playRound(2, 2);
+console.log(gameBoard.getBoard())
