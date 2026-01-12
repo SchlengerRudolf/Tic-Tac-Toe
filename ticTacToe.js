@@ -44,11 +44,8 @@ const gameController = (function () {
     }
 
     const playRound = function (row, column) {
-        let validTurn = false;
-
-        while (!validTurn) {
-            validTurn = gameBoard.setField(row, column, playersTurn);
-        }
+    
+        if (!gameBoard.setField(row, column, playersTurn)) return;
 
         if (roundCounter >= 5 && checkWin(playersTurn)) {
             console.log(playersTurn + " is the winner!");
