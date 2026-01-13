@@ -41,6 +41,8 @@ const gameController = (function () {
 
     let playersTurn = playerOne;
 
+    const getCurrentPlayer = () => playersTurn;
+
     const switchTurn = () => {
         playersTurn = playersTurn === playerOne ? playerTwo : playerOne;
     }
@@ -50,14 +52,18 @@ const gameController = (function () {
         if (!gameBoard.setField(row, column, playersTurn)) return;
 
         if (roundCounter >= 5 && checkWin(playersTurn)) {
-            console.log(playersTurn + " is the winner!");
+            console.log(playersTurn.getName() + " is the winner!");
             return;
         }
+
+        switchTurn();
+        display.renderBoard();
+
         if (roundCounter == 9) {
             console.log("It's a tie!")
             return;
         }
-        switchTurn();
+        
         roundCounter++;
     }
     
@@ -65,8 +71,8 @@ const gameController = (function () {
         let isWinner;
 
         //Check vertical win condition
-        for (let i = 0; i < gameBoard.getBoard.length; i++) {
-            for (let j = 0; j < gameBoard.getBoard.length; j++) {
+        for (let i = 0; i < gameBoard.getBoard().length; i++) {
+            for (let j = 0; j < gameBoard.getBoard().length; j++) {
                 if (player !== gameBoard.getBoard()[i][j]) {
                     isWinner = false;
                     break;
@@ -79,8 +85,8 @@ const gameController = (function () {
         }
 
         //Check horizontal win condition
-        for (let i = 0; i < gameBoard.getBoard.length; i++) {
-            for (let j = 0; j < gameBoard.getBoard.length; j++) {
+        for (let i = 0; i < gameBoard.getBoard().length; i++) {
+            for (let j = 0; j < gameBoard.getBoard().length; j++) {
                 if (player !== gameBoard.getBoard()[j][i]) {
                     isWinner = false;
                     break;
@@ -93,7 +99,7 @@ const gameController = (function () {
         }
 
         //Check top-left diagonal win condition
-        for (let i = 0; i < gameBoard.getBoard.length; i++) {
+        for (let i = 0; i < gameBoard.getBoard().length; i++) {
             if (player !== gameBoard.getBoard()[i][i]) {
                 isWinner = false;
                 break;
@@ -111,13 +117,14 @@ const gameController = (function () {
         return true;
     }
 
-    return { playRound };
+    return { playRound, getCurrentPlayer };
 })();
 
 const display = (function () {
     const container = document.querySelector(".gameboard");
    
     const renderBoard = () => {
+        container.innerHTML="";
         for (const arr of gameBoard.getBoard()) {
             for (const val of arr) {
                 const field = document.createElement("div");
@@ -133,20 +140,24 @@ const display = (function () {
                 container.appendChild(field);
             }
         }
+        markSpotEvent();
+    }
+
+    const markSpotEvent = () => {
+        const fields = container.querySelectorAll(".field");
+        
+        fields[0].addEventListener("click", () => gameController.playRound(0, 0, gameController.getCurrentPlayer()));
+        fields[1].addEventListener("click", () => gameController.playRound(0, 1, gameController.getCurrentPlayer()));
+        fields[2].addEventListener("click", () => gameController.playRound(0, 2, gameController.getCurrentPlayer()));
+        fields[3].addEventListener("click", () => gameController.playRound(1, 0, gameController.getCurrentPlayer()));
+        fields[4].addEventListener("click", () => gameController.playRound(1, 1, gameController.getCurrentPlayer()));
+        fields[5].addEventListener("click", () => gameController.playRound(1, 2, gameController.getCurrentPlayer()));
+        fields[6].addEventListener("click", () => gameController.playRound(2, 0, gameController.getCurrentPlayer()));
+        fields[7].addEventListener("click", () => gameController.playRound(2, 1, gameController.getCurrentPlayer()));
+        fields[8].addEventListener("click", () => gameController.playRound(2, 2, gameController.getCurrentPlayer()));
     }
 
     return { renderBoard };
 }());
 
-gameController.playRound(0,0);
-gameController.playRound(1,1);
-gameController.playRound(2,2);
-gameController.playRound(2,1);
-gameController.playRound(0,1);
-gameController.playRound(0,2);
-gameController.playRound(2,0);
-gameController.playRound(1,0);
-gameController.playRound(1,2);
-
 display.renderBoard();
-console.log(gameBoard.getBoard());
