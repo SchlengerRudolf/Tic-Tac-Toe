@@ -55,18 +55,15 @@ const gameController = (function () {
             if (roundCounter >= 5 && checkWin(playersTurn)) {
                 console.log(playersTurn.getName() + " is the winner!");
                 endGame = true;
-                display.renderBoard();
                 return;
             }
 
             if (roundCounter == 9) {
                 console.log("It's a tie!")
                 endGame = true;
-                display.renderBoard();
                 return;
             }
             
-            display.renderBoard();
             switchTurn();
             roundCounter++;
         }
@@ -151,15 +148,20 @@ const display = (function () {
     const markSpotEvent = () => {
         const fields = container.querySelectorAll(".field");
         
-        fields[0].addEventListener("click", () => gameController.playRound(0, 0, gameController.getCurrentPlayer()));
-        fields[1].addEventListener("click", () => gameController.playRound(0, 1, gameController.getCurrentPlayer()));
-        fields[2].addEventListener("click", () => gameController.playRound(0, 2, gameController.getCurrentPlayer()));
-        fields[3].addEventListener("click", () => gameController.playRound(1, 0, gameController.getCurrentPlayer()));
-        fields[4].addEventListener("click", () => gameController.playRound(1, 1, gameController.getCurrentPlayer()));
-        fields[5].addEventListener("click", () => gameController.playRound(1, 2, gameController.getCurrentPlayer()));
-        fields[6].addEventListener("click", () => gameController.playRound(2, 0, gameController.getCurrentPlayer()));
-        fields[7].addEventListener("click", () => gameController.playRound(2, 1, gameController.getCurrentPlayer()));
-        fields[8].addEventListener("click", () => gameController.playRound(2, 2, gameController.getCurrentPlayer()));
+        fields[0].addEventListener("click", () => fieldClickFunc(0, 0));
+        fields[1].addEventListener("click", () => fieldClickFunc(0, 1));
+        fields[2].addEventListener("click", () => fieldClickFunc(0, 2));
+        fields[3].addEventListener("click", () => fieldClickFunc(1, 0));
+        fields[4].addEventListener("click", () => fieldClickFunc(1, 1));
+        fields[5].addEventListener("click", () => fieldClickFunc(1, 2));
+        fields[6].addEventListener("click", () => fieldClickFunc(2, 0));
+        fields[7].addEventListener("click", () => fieldClickFunc(2, 1));
+        fields[8].addEventListener("click", () => fieldClickFunc(2, 2));
+    }
+
+    const fieldClickFunc = (row, column) => {
+        gameController.playRound(row, column, gameController.getCurrentPlayer());
+        renderBoard();
     }
 
     return { renderBoard };

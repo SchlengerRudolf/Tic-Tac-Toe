@@ -1,7 +1,10 @@
 :root {
     --player-one-color: #ff0000;
-    --player-two-color: #0000ff; 
-    --row-column-boardsize: 150px 150px 150px
+    --player-two-color: #0000ff;
+    --hover-color: #fbfb003f;
+    --simple-border: 1px solid #000000; 
+    --field-size: 150px;
+    --field-text-size: calc(var(--field-size) / 2);
 }
 
 * {
@@ -13,8 +16,8 @@
     margin-top: 1rem;
 
     display: grid;
-    grid-template-columns: var(--row-column-boardsize);
-    grid-template-rows: var(--row-column-boardsize);
+    grid-template-columns: repeat(3, var(--field-size));
+    grid-template-rows: repeat(3, var(--field-size));
     justify-content: center;
 }
 
@@ -23,11 +26,15 @@
     justify-content: center;
     align-items: center;
 
-    border: 1px solid #000000;
+    border: var(--simple-border);
+}
+
+.field:hover:empty {
+    background-color: var(--hover-color);
 }
 
 .playerOne, .playerTwo {
-    font-size: 64px;
+    font-size: var(--field-text-size);
 }
 
 .playerOne {
