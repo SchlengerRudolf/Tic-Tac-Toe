@@ -21,7 +21,15 @@ const gameBoard = (function () {
         return false;
     };
 
-    return { getBoard, setField };
+    const clearBoard = () => {
+        for (let i = 0; i < row; i++) {
+            for (let j = 0; j < column; j++) {
+                board[i][j] = 0;
+            }
+        }
+    }
+
+    return { getBoard, setField, clearBoard };
 })();
 
 function player(name, id) {
@@ -119,7 +127,14 @@ const gameController = (function () {
         return true;
     }
 
-    return { playRound, getCurrentPlayer };
+    const restartGame = () => {
+        gameBoard.clearBoard();
+        roundCounter = 1;
+        endGame = false;
+        playersTurn = playerOne;
+    }
+
+    return { playRound, getCurrentPlayer, restartGame };
 })();
 
 const display = (function () {
@@ -142,11 +157,12 @@ const display = (function () {
                 container.appendChild(field);
             }
         }
-        markSpotEvent();
+        events();
     }
 
-    const markSpotEvent = () => {
+    const events = () => {
         const fields = container.querySelectorAll(".field");
+        const restartBtn = document.querySelector(".restart")
         
         fields[0].addEventListener("click", () => fieldClickFunc(0, 0));
         fields[1].addEventListener("click", () => fieldClickFunc(0, 1));
@@ -157,9 +173,13 @@ const display = (function () {
         fields[6].addEventListener("click", () => fieldClickFunc(2, 0));
         fields[7].addEventListener("click", () => fieldClickFunc(2, 1));
         fields[8].addEventListener("click", () => fieldClickFunc(2, 2));
+        restartBtn.addEventListener("click", () => {
+            gameController.restartGame();
+            renderBoard();
+        });
     }
 
-    const fieldClickFunc = (row, column) => {
+    function fieldClickFunc (row, column) {
         gameController.playRound(row, column, gameController.getCurrentPlayer());
         renderBoard();
     }
