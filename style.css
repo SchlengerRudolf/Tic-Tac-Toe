@@ -1,0 +1,39 @@
+:root {
+    --player-one-color: #ff0000;
+    --player-two-color: #0000ff; 
+    --row-column-boardsize: 150px 150px 150px
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.gameboard {
+    margin-top: 1rem;
+
+    display: grid;
+    grid-template-columns: var(--row-column-boardsize);
+    grid-template-rows: var(--row-column-boardsize);
+    justify-content: center;
+}
+
+.field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #000000;
+}
+
+.playerOne, .playerTwo {
+    font-size: 64px;
+}
+
+.playerOne {
+    color: var(--player-one-color);
+}
+
+.playerTwo {
+    color: var(--player-two-color);
+}
