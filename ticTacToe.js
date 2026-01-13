@@ -36,6 +36,7 @@ function player(name, id) {
 
 const gameController = (function () {
     let roundCounter = 1;
+    let endGame = false;
     const playerOne = player("Rudi", 1);
     const playerTwo = player("Diego", 2);
 
@@ -48,23 +49,27 @@ const gameController = (function () {
     }
 
     const playRound = (row, column) => {
-    
-        if (!gameBoard.setField(row, column, playersTurn)) return;
+        if (!endGame) {
+            if (!gameBoard.setField(row, column, playersTurn)) return;
 
-        if (roundCounter >= 5 && checkWin(playersTurn)) {
-            console.log(playersTurn.getName() + " is the winner!");
-            return;
+            if (roundCounter >= 5 && checkWin(playersTurn)) {
+                console.log(playersTurn.getName() + " is the winner!");
+                endGame = true;
+                display.renderBoard();
+                return;
+            }
+
+            if (roundCounter == 9) {
+                console.log("It's a tie!")
+                endGame = true;
+                display.renderBoard();
+                return;
+            }
+            
+            display.renderBoard();
+            switchTurn();
+            roundCounter++;
         }
-
-        switchTurn();
-        display.renderBoard();
-
-        if (roundCounter == 9) {
-            console.log("It's a tie!")
-            return;
-        }
-        
-        roundCounter++;
     }
     
     const checkWin = (player) => {
