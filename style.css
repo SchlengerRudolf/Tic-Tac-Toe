@@ -4,7 +4,9 @@
     --hover-color: #fbfb003f;
     --simple-border: 1px solid #000000; 
     --field-size: 150px;
+    --text-size: calc(var(--field-size) / 2.5);
     --field-text-size: calc(var(--field-size) / 2);
+    --standard-gap: 1rem 0;
 }
 
 * {
@@ -12,8 +14,14 @@
     margin: 0;
 }
 
+.topText {
+    margin: var(--standard-gap);
+    font-size: var(--text-size);
+    justify-self: center;
+}
+
 .gameboard {
-    margin: 1rem 0;
+    margin: var(--standard-gap);
 
     display: grid;
     grid-template-columns: repeat(3, var(--field-size));

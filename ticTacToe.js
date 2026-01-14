@@ -44,7 +44,7 @@ function player(name, id) {
 
 const gameController = (function () {
     let roundCounter = 1;
-    let endGame = false;
+    let gameStatus = "going";
     const playerOne = player("Rudi", 1);
     const playerTwo = player("Diego", 2);
 
@@ -57,18 +57,18 @@ const gameController = (function () {
     }
 
     const playRound = (row, column) => {
-        if (!endGame) {
+        if (gameStatus === "going") {
             if (!gameBoard.setField(row, column, playersTurn)) return;
 
             if (roundCounter >= 5 && checkWin(playersTurn)) {
                 console.log(playersTurn.getName() + " is the winner!");
-                endGame = true;
+                gameStatus = "endWinner";
                 return;
             }
 
             if (roundCounter == 9) {
                 console.log("It's a tie!")
-                endGame = true;
+                gameStatus = "endTie";
                 return;
             }
             
@@ -130,16 +130,39 @@ const gameController = (function () {
     const restartGame = () => {
         gameBoard.clearBoard();
         roundCounter = 1;
-        endGame = false;
+        gameStatus = "going";
         playersTurn = playerOne;
     }
 
-    return { playRound, getCurrentPlayer, restartGame };
+    const getGameStatus = () => gameStatus;
+
+    return { playRound, getCurrentPlayer, restartGame, getGameStatus };
 })();
 
 const display = (function () {
     const container = document.querySelector(".gameboard");
-   
+    const topText = document.querySelector(".topText");
+    
+    const renderGame = () => {
+        renderBoard();
+        renderTopText();
+    }
+
+    const renderTopText = () => {
+        const currentPlayerName = gameController.getCurrentPlayer().getName();
+        const status = gameController.getGameStatus();
+
+        if (status === "endWinner") {
+            topText.textContent = currentPlayerName + " is the winner!";
+        }
+        else if (status === "endTie") {
+            topText.textContent = "It's a tie!"
+        }
+        else {
+            topText.textContent = currentPlayerName + "'s turn!"
+        }
+    }
+
     const renderBoard = () => {
         container.innerHTML="";
         for (const arr of gameBoard.getBoard()) {
@@ -175,16 +198,17 @@ const display = (function () {
         fields[8].addEventListener("click", () => fieldClickFunc(2, 2));
         restartBtn.addEventListener("click", () => {
             gameController.restartGame();
-            renderBoard();
+            topText.textContent = "";
+            renderGame();
         });
     }
 
     function fieldClickFunc (row, column) {
         gameController.playRound(row, column, gameController.getCurrentPlayer());
-        renderBoard();
+        renderGame();
     }
 
-    return { renderBoard };
+    return { renderGame };
 }());
 
-display.renderBoard();
+display.renderGame();
