@@ -142,6 +142,7 @@ const gameController = (function () {
 const display = (function () {
     const container = document.querySelector(".gameboard");
     const topText = document.querySelector(".topText");
+    const restartBtn = document.querySelector(".restart");
     
     const renderGame = () => {
         renderBoard();
@@ -180,12 +181,11 @@ const display = (function () {
                 container.appendChild(field);
             }
         }
-        events();
+        fieldClickEvent();
     }
 
-    const events = () => {
+    const fieldClickEvent = () => {
         const fields = container.querySelectorAll(".field");
-        const restartBtn = document.querySelector(".restart")
         
         fields[0].addEventListener("click", () => fieldClickFunc(0, 0));
         fields[1].addEventListener("click", () => fieldClickFunc(0, 1));
@@ -196,17 +196,18 @@ const display = (function () {
         fields[6].addEventListener("click", () => fieldClickFunc(2, 0));
         fields[7].addEventListener("click", () => fieldClickFunc(2, 1));
         fields[8].addEventListener("click", () => fieldClickFunc(2, 2));
-        restartBtn.addEventListener("click", () => {
-            gameController.restartGame();
-            topText.textContent = "";
-            renderGame();
-        });
     }
 
     function fieldClickFunc (row, column) {
         gameController.playRound(row, column, gameController.getCurrentPlayer());
         renderGame();
     }
+
+    restartBtn.addEventListener("click", () => {
+            gameController.restartGame();
+            topText.textContent = "";
+            renderGame();
+        });
 
     return { renderGame };
 }());
