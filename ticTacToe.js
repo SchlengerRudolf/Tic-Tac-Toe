@@ -3,6 +3,8 @@ const gameBoard = (function () {
     const column = 3;
     const board = [];
 
+    // --- Start board ---
+
     for (let i = 0; i < row; i++) {
         board[i] = [];
         for (let j = 0; j < column; j++) {
@@ -10,8 +12,9 @@ const gameBoard = (function () {
         }
     }
 
-    const getBoard = () => board;
+    // --- Functions ---
 
+    const getBoard = () => board;
     const setField = (row, column, player) => {
         if (board[row][column] === 0) {
             board[row][column] = player;
@@ -44,20 +47,23 @@ function player(name, id) {
 }
 
 const gameController = (function () {
-    let roundCounter = 1;
-    let gameStatus = "going";
     const playerOne = player("Player 1", 1);
     const playerTwo = player("Player 2", 2);
     const players = [playerOne, playerTwo];
 
+    let roundCounter = 1;
+    let gameStatus = "going";
     let playersTurn = playerOne;
+
+    // --- Player functions ---
 
     const getCurrentPlayer = () => playersTurn;
     const getPlayer = (index) => players[index];
-
     const switchTurn = () => {
         playersTurn = playersTurn === playerOne ? playerTwo : playerOne;
     }
+
+    // --- Game functions ---
 
     const playRound = (row, column) => {
         if (gameStatus === "going") {
@@ -78,6 +84,17 @@ const gameController = (function () {
         }
     }
     
+    const restartGame = () => {
+        gameBoard.clearBoard();
+        roundCounter = 1;
+        gameStatus = "going";
+        playersTurn = playerOne;
+    }
+
+    const getGameStatus = () => gameStatus;
+
+    // --- Winning conditions ---
+
     const checkWin = (player) => {
         let isWinner;
 
@@ -128,15 +145,6 @@ const gameController = (function () {
         return true;
     }
 
-    const restartGame = () => {
-        gameBoard.clearBoard();
-        roundCounter = 1;
-        gameStatus = "going";
-        playersTurn = playerOne;
-    }
-
-    const getGameStatus = () => gameStatus;
-
     return { playRound, getPlayer, getCurrentPlayer, getGameStatus, restartGame };
 })();
 
@@ -147,6 +155,8 @@ const display = (function () {
     const changeBtnOne = document.getElementById("changeOne");
     const changeBtnTwo = document.getElementById("changeTwo");
     
+    // --- Render-functions ---
+
     const renderGame = () => {
         renderBoard();
         renderTopText();
@@ -187,8 +197,15 @@ const display = (function () {
         fieldClickEvent();
     }
 
+    // --- Event-handler ---
+
     const fieldClickEvent = () => {
         const fields = container.querySelectorAll(".field");
+
+        function fieldClickFunc (row, column) {
+            gameController.playRound(row, column, gameController.getCurrentPlayer());
+            renderGame();
+        }
         
         fields[0].addEventListener("click", () => fieldClickFunc(0, 0));
         fields[1].addEventListener("click", () => fieldClickFunc(0, 1));
@@ -199,11 +216,6 @@ const display = (function () {
         fields[6].addEventListener("click", () => fieldClickFunc(2, 0));
         fields[7].addEventListener("click", () => fieldClickFunc(2, 1));
         fields[8].addEventListener("click", () => fieldClickFunc(2, 2));
-    }
-
-    function fieldClickFunc (row, column) {
-        gameController.playRound(row, column, gameController.getCurrentPlayer());
-        renderGame();
     }
 
     restartBtn.addEventListener("click", () => {
@@ -238,5 +250,7 @@ const display = (function () {
 
     return { renderGame };
 }());
+
+// --- Initial render ---
 
 display.renderGame();

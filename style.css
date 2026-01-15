@@ -4,14 +4,25 @@
     --player-one-color: #ff0000;
     --player-two-color: #0000ff;
     --hover-color: #fbfb003f;
+    --button-hover-color: #ccb1b1;
+
     --simple-border: 1px solid #000000;
+    --invisible-border: 1px solid var(--background-color);
     --input-shadow:  0px 2px 3px #00000050;
     --gameboard-shadow: 0px 2px 5px #00000050;
+
     --field-size: 150px;
     --text-size: calc(var(--field-size) / 2.5);
     --field-text-size: calc(var(--field-size) / 2);
+    --restart-text-size: 1rem;
+    --radius-round: 100%;
+
+    --container-gap: 1rem;
     --form-gap: 3rem;
     --standard-margin: 1rem 0;
+    --label-margin: 0 0 0.5rem 0;
+    --button-padding: 1px 3px;
+    --big-button-padding: 2px 6px;
 }
 
 * {
@@ -63,10 +74,10 @@ body {
     color: var(--player-two-color);
 }
 
-.restart {
-    margin: var(--standard-margin);
+.bottom-container {
     display: flex;
-    justify-self: center;
+    justify-content: center;
+    gap: var(--container-gap);
 }
 
 #change-name-form {
@@ -75,13 +86,36 @@ body {
     gap: var(--form-gap);
 }
 
-.playerLabel, .playerInput {
+.playerLabel {
     display: block;
-    margin-bottom: 0.5rem;
+    margin: var(--label-margin);
 }
 
 .playerInput {
-    border-width: 1px;
+    border: var(--invisible-border);
+    width: var(--field-size);
+}
+
+#changeOne, #changeTwo {
+    border: var(--invisible-border);
+    border-radius: var(--radius-round);
+    padding: var(--button-padding);
+}
+
+.restart {
+    margin: var(--standard-margin);
+    padding: var(--big-button-padding);
+    font-size: var(--restart-text-size);
+
+    display: flex;
+    justify-self: center;
+
+    border: var(--invisible-border);
+    border-radius: var(--radius-round);
+}
+
+.restart:hover, #changeOne:hover, #changeTwo:hover {
+    background-color: var(--button-hover-color);
 }
 
 .shadow {
