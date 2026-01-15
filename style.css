@@ -1,12 +1,17 @@
 :root {
+    --background-color: #c1d3f180;
+    --field-color: #ffffff;
     --player-one-color: #ff0000;
     --player-two-color: #0000ff;
     --hover-color: #fbfb003f;
-    --simple-border: 1px solid #000000; 
+    --simple-border: 1px solid #000000;
+    --input-shadow:  0px 2px 3px #00000050;
+    --gameboard-shadow: 0px 2px 5px #00000050;
     --field-size: 150px;
     --text-size: calc(var(--field-size) / 2.5);
     --field-text-size: calc(var(--field-size) / 2);
-    --standard-gap: 1rem 0;
+    --form-gap: 3rem;
+    --standard-margin: 1rem 0;
 }
 
 * {
@@ -14,15 +19,18 @@
     margin: 0;
 }
 
+body {
+    background-color: var(--background-color);
+}
+
 .topText {
-    margin: var(--standard-gap);
+    margin: var(--standard-margin);
     font-size: var(--text-size);
     justify-self: center;
 }
 
 .gameboard {
-    margin: var(--standard-gap);
-
+    margin: var(--standard-margin);
     display: grid;
     grid-template-columns: repeat(3, var(--field-size));
     grid-template-rows: repeat(3, var(--field-size));
@@ -34,7 +42,9 @@
     justify-content: center;
     align-items: center;
 
+    background-color: var(--field-color);
     border: var(--simple-border);
+    box-shadow: var(--gameboard-shadow);
 }
 
 .field:hover:empty {
@@ -54,6 +64,26 @@
 }
 
 .restart {
+    margin: var(--standard-margin);
     display: flex;
     justify-self: center;
+}
+
+#change-name-form {
+    display: flex;
+    justify-content: center;
+    gap: var(--form-gap);
+}
+
+.playerLabel, .playerInput {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.playerInput {
+    border-width: 1px;
+}
+
+.shadow {
+    box-shadow: var(--input-shadow);
 }

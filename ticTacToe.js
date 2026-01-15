@@ -33,24 +33,27 @@ const gameBoard = (function () {
 })();
 
 function player(name, id) {
-    const playerName = name;
+    let playerName = name;
     const playerId = id;
 
     const getName = () => playerName;
+    const setName = (newName) => playerName = newName;
     const getId = () => playerId;
 
-    return { getName, getId };
+    return { getName, setName, getId };
 }
 
 const gameController = (function () {
     let roundCounter = 1;
     let gameStatus = "going";
-    const playerOne = player("Rudi", 1);
-    const playerTwo = player("Diego", 2);
+    const playerOne = player("Player 1", 1);
+    const playerTwo = player("Player 2", 2);
+    const players = [playerOne, playerTwo];
 
     let playersTurn = playerOne;
 
     const getCurrentPlayer = () => playersTurn;
+    const getPlayer = (index) => players[index];
 
     const switchTurn = () => {
         playersTurn = playersTurn === playerOne ? playerTwo : playerOne;
@@ -61,13 +64,11 @@ const gameController = (function () {
             if (!gameBoard.setField(row, column, playersTurn)) return;
 
             if (roundCounter >= 5 && checkWin(playersTurn)) {
-                console.log(playersTurn.getName() + " is the winner!");
                 gameStatus = "endWinner";
                 return;
             }
 
             if (roundCounter == 9) {
-                console.log("It's a tie!")
                 gameStatus = "endTie";
                 return;
             }
@@ -136,13 +137,15 @@ const gameController = (function () {
 
     const getGameStatus = () => gameStatus;
 
-    return { playRound, getCurrentPlayer, restartGame, getGameStatus };
+    return { playRound, getPlayer, getCurrentPlayer, getGameStatus, restartGame };
 })();
 
 const display = (function () {
     const container = document.querySelector(".gameboard");
     const topText = document.querySelector(".topText");
     const restartBtn = document.querySelector(".restart");
+    const changeBtnOne = document.getElementById("changeOne");
+    const changeBtnTwo = document.getElementById("changeTwo");
     
     const renderGame = () => {
         renderBoard();
@@ -208,6 +211,30 @@ const display = (function () {
             topText.textContent = "";
             renderGame();
         });
+
+    changeBtnOne.addEventListener("click", () => {
+        event.preventDefault();
+        let formText = document.getElementById("playerOne").value;
+
+        if (formText !== "" && formText !== document.getElementById("playerTwo").value) {
+            gameController.getPlayer(0).setName(formText);
+            renderGame();
+        }
+
+        document.getElementById("change-name-form").reset();
+    })
+
+    changeBtnTwo.addEventListener("click", () => {
+        event.preventDefault();
+        let formText = document.getElementById("playerTwo").value;
+
+        if (formText !== "" && formText !== document.getElementById("playerOne").value) {
+            gameController.getPlayer(1).setName(formText);
+            renderGame();
+        }
+
+        document.getElementById("change-name-form").reset();
+    })
 
     return { renderGame };
 }());
